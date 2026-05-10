@@ -6,6 +6,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
 import { supabase } from '../lib/supabase'
 import useAuthStore from '../store/useAuthStore'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 // ── Toolbar ──────────────────────────────────────────────
 function Toolbar({ editor }) {
@@ -283,6 +284,7 @@ export default function Playbook() {
   const [editing, setEditing] = useState(null)   // null = closed, {} = new, note = edit
   const [search, setSearch] = useState('')
   const [filterTag, setFilterTag] = useState('')
+  const [confirmId, setConfirmId] = useState(null)
 
   const fetchNotes = async () => {
     setLoading(true)
@@ -296,10 +298,12 @@ export default function Playbook() {
 
   useEffect(() => { fetchNotes() }, [])
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this note?')) return
-    await supabase.from('playbook').delete().eq('id', id)
-    setNotes(n => n.filter(x => x.id !== id))
+  const handleDelete = (id) => setConfirmId(id)
+
+  const confirmDelete = async () => {
+    await supabase.from('playbook').delete().eq('id', confirmId)
+    setNotes(n => n.filter(x => x.id !== confirmId))
+    setConfirmId(null)
   }
 
   const allTags = [...new Set(notes.flatMap(n => n.tags || []))]
@@ -396,6 +400,13 @@ export default function Playbook() {
           note={editing}
           onSave={() => { setEditing(null); fetchNotes() }}
           onClose={() => setEditing(null)}
+        />
+      )}
+      {confirmId && (
+        <ConfirmDialog
+          message="This note will be permanently deleted."
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmId(null)}
         />
       )}
     </div>

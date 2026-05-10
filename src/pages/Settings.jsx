@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import useBrokerStore from '../store/useBrokerStore'
 import useStrategyStore from '../store/useStrategyStore'
 import useAuthStore from '../store/useAuthStore'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 const BROKER_OPTIONS = [
   { key: 'zerodha', label: 'Zerodha Kite' },
@@ -15,6 +16,7 @@ function BrokerSection() {
   const [form, setForm] = useState({ name: '', broker_key: 'zerodha', initial_capital: '' })
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [confirmId, setConfirmId] = useState(null)
 
   useEffect(() => { fetchBrokers() }, [])
 
@@ -33,6 +35,10 @@ function BrokerSection() {
     if (error) setError(error.message)
     else setForm({ name: '', broker_key: 'zerodha', initial_capital: '' })
     setLoading(false)
+  }
+  const confirmDelete = async () => {
+    await deleteBroker(confirmId)
+    setConfirmId(null)
   }
 
   return (
@@ -122,7 +128,7 @@ function BrokerSection() {
                   {isPositive ? '+' : ''}₹{diff.toLocaleString('en-IN')} ({isPositive ? '+' : ''}{growth}%)
                 </p>
               </div>
-              <button onClick={() => deleteBroker(b.id)} className="btn-ghost"
+              <button onClick={() => setConfirmId(b.id)} className="btn-ghost"
                 style={{ marginLeft: 16, padding: '6px 12px', fontSize: 12, color: 'var(--red)', borderColor: 'var(--red)40' }}>
                 Remove
               </button>
@@ -130,6 +136,13 @@ function BrokerSection() {
           )
         })}
       </div>
+      {confirmId && (
+        <ConfirmDialog
+          message="This broker account will be removed. All associated trades will remain but lose the broker link."
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmId(null)}
+        />
+      )}
     </div>
   )
 }
@@ -140,6 +153,7 @@ function StrategySection() {
   const [form, setForm] = useState({ name: '', description: '' })
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [confirmId, setConfirmId] = useState(null)
 
   useEffect(() => { fetchStrategies() }, [])
 
@@ -151,6 +165,10 @@ function StrategySection() {
     if (error) setError(error.message)
     else setForm({ name: '', description: '' })
     setLoading(false)
+  }
+  const confirmDelete = async () => {
+    await deleteBroker(confirmId)
+    setConfirmId(null)
   }
 
   return (
@@ -209,7 +227,7 @@ function StrategySection() {
             {s.description && (
               <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>— {s.description}</span>
             )}
-            <button onClick={() => deleteStrategy(s.id)} style={{
+            <button onClick={() => setConfirmId(b.id)} style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: 'var(--text-muted)', fontSize: 12, padding: 0,
               transition: 'color 0.15s',
@@ -220,6 +238,13 @@ function StrategySection() {
           </div>
         ))}
       </div>
+      {confirmId && (
+        <ConfirmDialog
+          message="This strategy will be deleted. Trades using it will remain but lose the strategy link."
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmId(null)}
+        />
+      )}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useTradeStore from '../store/useTradeStore'
 import useBrokerStore from '../store/useBrokerStore'
 import useStrategyStore from '../store/useStrategyStore'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 const DIRECTION_STYLE = {
   LONG: { color: 'var(--green)', bg: 'var(--green-dim)', label: '▲ LONG' },
@@ -357,14 +358,18 @@ export default function Journal() {
   const { brokers, fetchBrokers } = useBrokerStore()
   const { strategies, fetchStrategies } = useStrategyStore()
   const [showFilters, setShowFilters] = useState(false)
+  const [confirmId, setConfirmId] = useState(null)
 
   useEffect(() => { fetchBrokers(); fetchStrategies() }, [])
   useEffect(() => { fetchTrades(filters) }, [filters])
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this trade?')) return
-    await deleteTrade(id)
+  const handleDelete = (id) => setConfirmId(id)
+
+  const confirmDelete = async () => {
+    await deleteTrade(confirmId)
+    setConfirmId(null)
   }
+
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px' }}>
@@ -432,6 +437,13 @@ export default function Journal() {
           ))}
         </div>
       )}
+      {confirmId && (
+      <ConfirmDialog
+        message="This trade will be permanently deleted. This cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmId(null)}
+      />
+    )}
     </div>
   )
 }
