@@ -31,7 +31,7 @@ function Row({ children, cols = 2 }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: `repeat(${cols}, 1fr)`,
+      gridTemplateColumns: `repeat(auto-fit, minmax(140px, 1fr))`,
       gap: 12,
     }}>{children}</div>
   )
@@ -287,7 +287,7 @@ export default function TradeForm() {
   }
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 16px' }}>
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px', boxSizing: 'border-box', width: '100%' }}>
 
       <div style={{ marginBottom: 28 }}>
         <button onClick={() => navigate(-1)} style={{
