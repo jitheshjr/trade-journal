@@ -324,7 +324,7 @@ export default function Playbook() {
             fontSize: 11, color: 'var(--accent)', letterSpacing: '0.15em', marginBottom: 6,
           }}>PERSONAL PLAYBOOK</div>
           <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
-            Strategies & Notes
+            Notes
           </h1>
         </div>
         <button className="btn-primary" onClick={() => setEditing({})}>

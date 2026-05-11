@@ -5,10 +5,7 @@ import useBrokerStore from '../store/useBrokerStore'
 import useAuthStore from '../store/useAuthStore'
 
 function greeting() {
-  const h = new Date().getHours()
-  if (h < 12) return 'Good morning'
-  if (h < 17) return 'Good afternoon'
-  return 'Good evening'
+  return 'Welcome back!'
 }
 
 function getTodayRange() {
