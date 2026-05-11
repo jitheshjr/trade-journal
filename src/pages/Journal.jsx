@@ -375,25 +375,20 @@ export default function Journal() {
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px' }}>
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
         <div>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "'DM Mono', monospace",
             fontSize: 11, color: 'var(--accent)', letterSpacing: '0.15em', marginBottom: 6,
           }}>TRADE LOG</div>
-          <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
             Journal
           </h1>
         </div>
-        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-          <button className="btn-ghost" onClick={() => setShowFilters(f => !f)}
-            style={{ fontSize: 12 }}>
-            {showFilters ? 'Hide Filters' : 'Filters'}
-          </button>
-          <button className="btn-primary" onClick={() => navigate('/trade/new')}>
-            + New Trade
-          </button>
-        </div>
+        <button className="btn-ghost" onClick={() => setShowFilters(f => !f)}
+          style={{ fontSize: 12, padding: '8px 16px', flexShrink: 0 }}>
+          {showFilters ? 'Hide Filters' : 'Filters'}
+        </button>
       </div>
 
       {/* Summary */}

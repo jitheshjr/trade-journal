@@ -49,7 +49,7 @@ function BrokerSection() {
 
       {/* Add form */}
       <div className="card" style={{ marginBottom: 12 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 12 }}>
           <div>
             <label className="label">Account Name</label>
             <input
@@ -178,7 +178,7 @@ function StrategySection() {
       </h2>
 
       <div className="card" style={{ marginBottom: 12 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 12 }}>
           <div>
             <label className="label">Name</label>
             <input

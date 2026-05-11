@@ -195,7 +195,6 @@ function NoteEditor({ note, onSave, onClose }) {
 function NoteCard({ note, onEdit, onDelete }) {
   const [expanded, setExpanded] = useState(false)
 
-  // Strip HTML for preview text
   const preview = note.content
     ? note.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
     : 'No content'
@@ -204,63 +203,63 @@ function NoteCard({ note, onEdit, onDelete }) {
     <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
       <div
         onClick={() => setExpanded(e => !e)}
-        style={{ padding: '18px 20px', cursor: 'pointer' }}
+        style={{ padding: '16px', cursor: 'pointer' }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <h3 style={{
-              fontSize: 15, fontWeight: 700, color: 'var(--text-primary)',
-              marginBottom: 6, letterSpacing: '-0.01em',
-            }}>{note.title}</h3>
-
-            {!expanded && (
-              <p style={{
-                fontSize: 12, color: 'var(--text-muted)',
-                lineHeight: 1.6, marginBottom: 8,
-                overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
-              }}>{preview}</p>
-            )}
-
-            {/* Tags */}
-            {note.tags?.length > 0 && (
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {note.tags.map(tag => (
-                  <span key={tag} style={{
-                    fontSize: 10, padding: '2px 8px', borderRadius: 4,
-                    background: 'var(--accent-dim)', color: 'var(--accent)',
-                    fontWeight: 600, letterSpacing: '0.05em',
-                  }}>{tag}</span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
-            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-              {new Date(note.updated_at).toLocaleDateString('en-IN', {
-                day: 'numeric', month: 'short', year: 'numeric'
-              })}
-            </span>
-            <span style={{
-              fontSize: 12, color: 'var(--text-muted)',
-              transform: expanded ? 'rotate(180deg)' : 'rotate(0)',
-              transition: 'transform 0.2s', display: 'block',
-            }}>▼</span>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+          <h3 style={{
+            fontSize: 14, fontWeight: 700, color: 'var(--text-primary)',
+            marginBottom: 6, letterSpacing: '-0.01em',
+            wordBreak: 'break-word',
+          }}>{note.title}</h3>
+          <span style={{
+            fontSize: 12, color: 'var(--text-muted)', flexShrink: 0,
+            transform: expanded ? 'rotate(180deg)' : 'rotate(0)',
+            transition: 'transform 0.2s', display: 'block', marginTop: 2,
+          }}>▼</span>
         </div>
+
+        {!expanded && (
+          <p style={{
+            fontSize: 12, color: 'var(--text-muted)',
+            lineHeight: 1.6, marginBottom: 8,
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+          }}>{preview}</p>
+        )}
+
+        {note.tags?.length > 0 && (
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
+            {note.tags.map(tag => (
+              <span key={tag} style={{
+                fontSize: 10, padding: '2px 8px', borderRadius: 4,
+                background: 'var(--accent-dim)', color: 'var(--accent)',
+                fontWeight: 600, letterSpacing: '0.05em',
+              }}>{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Expanded content */}
       {expanded && (
         <div style={{ borderTop: '1px solid var(--border)' }}>
           <div
             className="tiptap-wrapper"
-            style={{ padding: '0 20px' }}
+            style={{
+              padding: '0 16px',
+              overflowX: 'hidden',
+              wordBreak: 'break-word',
+              maxWidth: '100%',
+            }}
             dangerouslySetInnerHTML={{ __html: note.content }}
           />
-          <div style={{
-            padding: '12px 20px', borderTop: '1px solid var(--border)',
-            display: 'flex', gap: 8,
+
+          {/* Actions — desktop only */}
+          <div className="desktop-only" style={{
+            padding: '12px 16px',
+            borderTop: '1px solid var(--border)',
+            gap: 8,
           }}>
             <button className="btn-ghost" onClick={() => onEdit(note)}
               style={{ fontSize: 12, padding: '6px 14px' }}>
