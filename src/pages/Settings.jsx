@@ -167,7 +167,7 @@ function StrategySection() {
     setLoading(false)
   }
   const confirmDelete = async () => {
-    await deleteBroker(confirmId)
+    await deleteStrategy(confirmId)
     setConfirmId(null)
   }
 
@@ -227,7 +227,7 @@ function StrategySection() {
             {s.description && (
               <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>— {s.description}</span>
             )}
-            <button onClick={() => setConfirmId(b.id)} style={{
+            <button onClick={() => setConfirmId(s.id)} style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: 'var(--text-muted)', fontSize: 12, padding: 0,
               transition: 'color 0.15s',
