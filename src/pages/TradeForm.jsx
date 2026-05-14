@@ -134,7 +134,7 @@ export default function TradeForm() {
   const navigate = useNavigate()
   const location = useLocation()
   const user = useAuthStore((s) => s.user)
-  const { brokers, fetchBrokers } = useBrokerStore()
+  const { brokers, fetchBrokers, recalculateBrokerCapital } = useBrokerStore()
   const { strategies, fetchStrategies } = useStrategyStore()
 
   // location.state.trade is passed when editing
@@ -200,6 +200,12 @@ export default function TradeForm() {
     setError(null)
 
     const broker = brokers.find(b => b.id === form.broker_id)
+    if (!broker) {
+      setError('Selected broker was not found. Please refresh and try again.')
+      setLoading(false)
+      return
+    }
+
     let chargesData = {}
 
     if (form.exit_price && form.status !== 'OPEN') {
@@ -268,19 +274,22 @@ export default function TradeForm() {
       // Insert new trade
       const { error } = await supabase.from('trades').insert(payload)
       dbError = error
-
-      // Update broker capital only on new closed trades
-      if (!error && chargesData.net_pnl !== undefined) {
-        await supabase.from('brokers')
-          .update({ current_capital: broker.current_capital + chargesData.net_pnl })
-          .eq('id', broker.id)
-      }
     }
 
     if (dbError) {
       setError(dbError.message)
       setLoading(false)
       return
+    }
+
+    const affectedBrokerIds = [...new Set([editTrade?.broker_id, form.broker_id].filter(Boolean))]
+    for (const brokerId of affectedBrokerIds) {
+      const { error } = await recalculateBrokerCapital(brokerId)
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+        return
+      }
     }
 
     navigate('/journal')

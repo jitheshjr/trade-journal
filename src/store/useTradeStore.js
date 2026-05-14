@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
+import useBrokerStore from './useBrokerStore'
 
 const useTradeStore = create((set) => ({
   trades: [],
@@ -59,8 +60,22 @@ const useTradeStore = create((set) => ({
 },
 
   deleteTrade: async (id) => {
+    const { data: trade, error: fetchError } = await supabase
+      .from('trades')
+      .select('broker_id')
+      .eq('id', id)
+      .single()
+
+    if (fetchError) return { error: fetchError }
+
     const { error } = await supabase.from('trades').delete().eq('id', id)
-    if (!error) set((s) => ({ trades: s.trades.filter((t) => t.id !== id) }))
+    if (!error) {
+      set((s) => ({ trades: s.trades.filter((t) => t.id !== id) }))
+      const { error: brokerError } = await useBrokerStore
+        .getState()
+        .recalculateBrokerCapital(trade?.broker_id)
+      if (brokerError) return { error: brokerError }
+    }
     return { error }
   },
 }))
