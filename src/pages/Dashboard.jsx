@@ -289,7 +289,7 @@ export default function Dashboard() {
             TODAY'S P&L
           </div>
           <div className="mono" style={{
-            fontSize: 24, fontWeight: 700,
+            fontSize: 20, fontWeight: 700,
             color: todayPnl > 0 ? 'var(--green)' : todayPnl < 0 ? 'var(--red)' : 'var(--text-primary)',
           }}>
             {todayPnl >= 0 ? '+' : ''}₹{todayPnl.toLocaleString('en-IN')}
@@ -303,7 +303,7 @@ export default function Dashboard() {
             TOTAL P&L
           </div>
           <div className="mono" style={{
-            fontSize: 24, fontWeight: 700,
+            fontSize: 20, fontWeight: 700,
             color: totalPnl >= 0 ? 'var(--green)' : 'var(--red)',
           }}>
             {totalPnl >= 0 ? '+' : ''}₹{totalPnl.toLocaleString('en-IN')}

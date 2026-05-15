@@ -294,11 +294,6 @@ function Filters({ filters, setFilter, clearFilters, brokers, strategies }) {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10 }}>
         <div>
-          <label className="label">Symbol</label>
-          <input className="input mono" placeholder="RELIANCE..."
-            value={filters.symbol} onChange={e => setFilter('symbol', e.target.value)} />
-        </div>
-        <div>
           <label className="label">Broker</label>
           <select className="input" value={filters.broker_id} onChange={e => setFilter('broker_id', e.target.value)}>
             <option value="">All</option>
@@ -318,23 +313,6 @@ function Filters({ filters, setFilter, clearFilters, brokers, strategies }) {
             <option value="">All</option>
             <option value="INTRADAY">Intraday</option>
             <option value="SWING">Swing</option>
-          </select>
-        </div>
-        <div>
-          <label className="label">Direction</label>
-          <select className="input" value={filters.direction} onChange={e => setFilter('direction', e.target.value)}>
-            <option value="">All</option>
-            <option value="LONG">Long</option>
-            <option value="SHORT">Short</option>
-          </select>
-        </div>
-        <div>
-          <label className="label">Status</label>
-          <select className="input" value={filters.status} onChange={e => setFilter('status', e.target.value)}>
-            <option value="">All</option>
-            <option value="OPEN">Open</option>
-            <option value="CLOSED">Closed</option>
-            <option value="PARTIAL">Partial</option>
           </select>
         </div>
         <div>
@@ -375,8 +353,8 @@ export default function Journal() {
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px' }}>
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
-        <div>
+      <div style={{ textAlign: 'center', marginBottom: 24 }}>
+        <div style={{ marginBottom: 16 }}>
           <div style={{
             fontFamily: "'DM Mono', monospace",
             fontSize: 11, color: 'var(--accent)', letterSpacing: '0.15em', marginBottom: 6,
@@ -385,10 +363,22 @@ export default function Journal() {
             Journal
           </h1>
         </div>
-        <button className="btn-ghost" onClick={() => setShowFilters(f => !f)}
-          style={{ fontSize: 12, padding: '8px 16px', flexShrink: 0 }}>
-          {showFilters ? 'Hide Filters' : 'Filters'}
-        </button>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 10,
+          flexWrap: 'wrap',
+        }}>
+          <button className="btn-primary" onClick={() => navigate('/trade/new')}
+            style={{ fontSize: 12, padding: '8px 16px', flexShrink: 0 }}>
+            + New Trade
+          </button>
+          <button className="btn-ghost" onClick={() => setShowFilters(f => !f)}
+            style={{ fontSize: 12, padding: '8px 16px', flexShrink: 0 }}>
+            {showFilters ? 'Hide Filters' : 'Filters'}
+          </button>
+        </div>
       </div>
 
       {/* Summary */}
