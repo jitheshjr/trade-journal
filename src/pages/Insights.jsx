@@ -32,7 +32,7 @@ function buildDailyPnl(trades) {
   trades
     .filter(t => t.status === 'CLOSED' && t.net_pnl !== null)
     .forEach(t => {
-      const day = new Date(t.entry_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+      const day = new Date(t.exit_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
       map[day] = (map[day] || 0) + t.net_pnl
     })
   return Object.entries(map).map(([date, pnl]) => ({ date, pnl: +pnl.toFixed(2) }))
